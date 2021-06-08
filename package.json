@@ -1,5 +1,5 @@
 {
-	"name": "amiculum-generator-yeo",
+	"name": "generator-yeo",
 	"version": "1.0.0",
 	"description": "Static site generator based on Webpack!",
 	"homepage": "https://github.com/slo-amiculum/generator-amiculum-yeo",
