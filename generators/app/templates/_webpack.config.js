@@ -224,6 +224,7 @@ module.exports = smp.wrap({
     new CleanWebpackPlugin(),
     new CopyWebpackPlugin([
       {from:'src/_images',to:`${assetPath}/images`},
+      {from:'src/_fonts',to:`${assetPath}/fonts`},
       {from:'**/*',ignore:['{**/\_*,**/\_*/**}','**/*.pug'],context: 'src/'}
     ]),
 
