@@ -6,7 +6,7 @@ const yosay = require('yosay');
 module.exports = class extends Generator {
 	prompting() {
 		// Have Yeoman greet the user.
-		this.log(yosay(`Welcome to the amazing ${chalk.green('amiculum-yeo')} generator!`));
+		this.log(yosay(`Welcome to the amazing ${chalk.green('generator-yeo')} generator!`));
 
 		const prompts = [
 			{
