@@ -1,13 +1,9 @@
 {
   "name": "generator-amiculum-yeo",
-  "version": "0.1.7",
+  "version": "1.0.0",
   "description": "Static site generator based on Webpack!",
   "homepage": "https://github.com/slo-amiculum/generator-amiculum-yeo",
-  "author": {
-    "name": "Stephen Orioste",
-    "email": "stephen.orioste@amiculum.biz",
-    "url": ""
-  },
+  "author": "Stephen Orioste <stephen.orioste@amiculum.biz>",
   "files": [
     "generators"
   ],
@@ -88,5 +84,12 @@
       "prettier"
     ]
   },
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/slo-amiculum/generator-amiculum-yeo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/slo-amiculum/generator-amiculum-yeo/issues"
+  }
 }
