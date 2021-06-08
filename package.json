@@ -1,6 +1,6 @@
 {
 	"name": "generator-yeo",
-	"version": "1.0.2",
+	"version": "1.0.0",
 	"description": "Static site generator based on Webpack!",
 	"homepage": "https://github.com/slo-amiculum/generator-amiculum-yeo",
 	"author": "Stephen Orioste <stephen.orioste@amiculum.biz>",
@@ -30,6 +30,7 @@
 		"jest": "^22.0.6",
 		"lint-staged": "^6.1.1",
 		"lodash": "^4.17.10",
+		"nsp": "^2.8.0",
 		"prettier": "^1.11.1",
 		"yeoman-assert": "^3.1.0",
 		"yeoman-test": "^1.7.0"
@@ -46,6 +47,7 @@
 		"testEnvironment": "node"
 	},
 	"scripts": {
+		"prepublishOnly": "nsp check",
 		"pretest": "eslint .",
 		"precommit": "lint-staged",
 		"test": "jest"
