@@ -23,7 +23,7 @@ npm install -g yo
 
 - Install generator-yeo
 ```bash
-npm i generator-amiculum-yeo -g
+npm i amiculum-generator-yeo -g
 ```
 
 - Generating new project
