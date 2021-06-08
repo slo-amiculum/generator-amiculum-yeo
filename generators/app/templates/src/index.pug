@@ -8,13 +8,18 @@ block config
 
 block content
   .yeo-info
+    img.logo(src="/assets/images/logo.png")
+
     h1=site.data.info.title
     
-    img.logo(src="/assets/images/logo.png")
-    
-    h2 Welcome to Amiculum Digital site generator
+    p.text-center Welcome to Amiculum Digital site generator,
+      br 
+      | To learn more about 
+      strong Amiculum Digital - Site Generator
+      |, click on the button below
     
     +button({
       "__text": "Learn More", 
-      "__link": "https://github.com/slo-amiculum/generator-amiculum-yeo"
+      "__link": "https://www.npmjs.com/package/generator-yeo",
+      "__target": "_blank"
     })

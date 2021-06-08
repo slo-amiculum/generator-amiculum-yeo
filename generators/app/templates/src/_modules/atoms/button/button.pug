@@ -2,8 +2,9 @@ mixin button(spec)
   - site = htmlWebpackPlugin.options
   - spec = spec || {}
   - spec.__class = spec.__class || ''
+  - spec.__target = spec.__target || ''
   - spec.__link  = spec.__link || '#'
   - spec.__text = spec.__text || ''
 
-  a.button(href=spec.__link class=spec.__class)&attributes(attributes)
-    p=spec.__text
+  a.button(href=spec.__link class=spec.__class target=spec.__target)&attributes(attributes)
+    span=spec.__text

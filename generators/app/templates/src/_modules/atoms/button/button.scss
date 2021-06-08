@@ -1,9 +1,9 @@
 .button {
   display: inline-block;
-  padding: 15px 20px;
-  background-color: #f39200;
-  color: #000;
-  border: 2px solid #f39200;
+  padding: 10px 20px;
+  background-color: $orange;
+  color: $white;
+  border: 2px solid $orange;
   text-decoration: none;
   margin: 0;
   border-radius: 5px;
@@ -12,5 +12,6 @@
 
   &:hover {
     background-color: transparent;
+    color: $blck;
   }
 }
