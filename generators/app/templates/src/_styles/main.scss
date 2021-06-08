@@ -39,6 +39,47 @@ body {
     width: 280px;
     height: auto;
     margin: 0 auto;
+
+    .hexagon {
+      animation: rotate 3s linear 1;
+      -webkit-animation: rotate 3s linear 1;
+      -moz-animation: rotate 3s linear 1;
+      position: relative;
+      transform-box: fill-box;
+      transform-origin: center;
+      -webkit-transform-box: fill-box;
+      -webkit-transform-origin: center;
+      animation-delay: 3s;
+      -webkit-animation-delay: 3s;
+      -moz-animation-delay: 3s;
+    }
+    
+    @keyframes rotate {
+      from { 
+        transform: rotate(0deg); 
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    
+    @-webkit-keyframes rotate {
+      from { 
+        -webkit-transform: rotate(0deg); 
+      }
+      to {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+    
+    @-moz-keyframes rotate {
+      from { 
+        transform: rotate(0deg); 
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
   }
 }
 
