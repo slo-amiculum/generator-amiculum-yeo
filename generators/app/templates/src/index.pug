@@ -1,0 +1,20 @@
+extends _layouts/base
+
+include ./_modules/button/button
+
+block config
+  - var page = 'homepage'
+  - var site = htmlWebpackPlugin.options //global site data
+
+block content
+  .yeo-info
+    h1=site.data.info.title
+    
+    img.logo(src="/assets/images/logo.png")
+    
+    h2 Welcome to Amiculum Digital site generator
+    
+    +button({
+      "__text": "Learn More", 
+      "__link": "https://github.com/slo-amiculum/generator-amiculum-yeo"
+    })

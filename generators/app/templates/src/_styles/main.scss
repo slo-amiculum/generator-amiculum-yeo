@@ -1,0 +1,51 @@
+// Import Third-party plugins' CSS here
+@import '../../node_modules/normalize.css/normalize';
+
+// Site Mixins, Variables and Fonts here
+@import "./_mixins";
+@import "./_var";
+@import "./_styles";
+@import "./_fonts";
+
+*,
+*:before,
+*:after {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+html {
+  font-size: $base-fontsize;
+}
+
+body {
+  font-family: $primaryFont;
+  color: $blck;
+  line-height: $base-lineheight;
+  margin: 0;
+  padding: 0;
+}
+
+// Default YEO css
+.yeo-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 100vh;
+  
+  .logo {
+    width: 100px;
+    height: auto;
+    margin: 0 auto;
+  }
+}
+
+// Print layout here
+@media print {
+
+}
+
+// Import Modules CSS here
+@import "../_modules/atoms/button/button";
