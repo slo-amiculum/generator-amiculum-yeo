@@ -1,3 +1,8 @@
+// Tailwind
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 // Import Third-party plugins' CSS here
 @import '../../node_modules/normalize.css/normalize';
 
@@ -6,11 +11,6 @@
 @import "./_var";
 @import "./_styles";
 @import "./_fonts";
-
-// Tailwind
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 *,
 *:before,
@@ -44,10 +44,6 @@ body {
   flex-direction: column;
   min-height: 100vh;
 
-  .title {
-    margin: 0;
-  }
-  
   .logo {
     width: 180px;
     height: auto;
