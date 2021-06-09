@@ -57,6 +57,10 @@ module.exports = class extends Generator {
 			this.destinationPath('postcss.config.js')
 		);
 		this.fs.copyTpl(
+			this.templatePath('_tailwind.config.js'),
+			this.destinationPath('tailwind.config.js')
+		);
+		this.fs.copyTpl(
 			this.templatePath('_webpack.config.js'),
 			this.destinationPath('webpack.config.js'),
 			{
