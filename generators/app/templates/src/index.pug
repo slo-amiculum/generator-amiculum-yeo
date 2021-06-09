@@ -8,7 +8,8 @@ block config
 
 block content
   .yeo-info
-    .logo.hidden(src="/assets/images/logo.png" alt="Amiculum Digital Logo")
+    .logo.vh
+      img(src="/assets/images/logo.png" alt="Amiculum Digital Logo" width="184" height="198")
     .logo 
       svg(width='184' height='198' viewBox='0 0 104 118' fill='none' xmlns='http://www.w3.org/2000/svg')
         path(d='M9.31153 100.786C10.9221 100.676 12.5158 101.171 13.7793 102.174C14.8572 103.094 15.3414 104.513 15.3414 106.47C15.3672 107.377 15.262 108.283 15.029 109.16C14.7984 109.862 14.4233 110.507 13.9277 111.055C13.3792 111.592 12.7248 112.009 12.0062 112.279C11.1378 112.566 10.2257 112.698 9.31153 112.669H5V100.786H9.31153ZM10.53 111.328C10.888 111.266 11.2352 111.153 11.561 110.993L11.9906 110.774C12.3273 110.555 12.6145 110.268 12.8342 109.932C13.1157 109.535 13.3247 109.092 13.4512 108.622C13.6225 108.024 13.7015 107.404 13.6855 106.782C13.6939 106.135 13.6151 105.49 13.4512 104.864C13.3176 104.336 13.0843 103.839 12.7639 103.398C12.3996 103.013 11.9648 102.7 11.4829 102.478C10.834 102.283 10.1609 102.181 9.48337 102.174H6.69494V111.39H9.78018C10.0314 111.389 10.2821 111.368 10.53 111.328V111.328Z' fill='#F39200')
@@ -26,7 +27,7 @@ block content
             stop(stop-color='#FBBA00')
             stop(offset='1' stop-color='#F39200')
 
-    h1.title.text-center!= site.data.info.title
+    h1.title.text-center= site.data.info.title
     
     p.text-center Thank you for using Amiculum YEO site generator,
       br 
