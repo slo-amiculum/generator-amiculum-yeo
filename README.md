@@ -4,7 +4,7 @@
 
 ## Technologies
 - Webpack
-- SASS
+- SASS & Tailwind for styling
 - PUG for templating
 - ES6
 
