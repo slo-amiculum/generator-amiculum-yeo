@@ -7,6 +7,11 @@
 @import "./_styles";
 @import "./_fonts";
 
+// Tailwind
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 *,
 *:before,
 *:after {
