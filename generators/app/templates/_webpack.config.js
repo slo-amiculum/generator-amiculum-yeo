@@ -21,7 +21,6 @@ const siteData = multiJsonLoader.loadFiles('./src/_data');
 
 let runMod = "development";
 
-
 if (process.argv.indexOf('--dev') === -1) {
   console.log('Running production build......');
   runMod = 'production'
@@ -29,7 +28,6 @@ if (process.argv.indexOf('--dev') === -1) {
   console.log('Running development build......');
   runMod = 'development'
 }
-
 
 function loadJsonFiles(startPath, parentObj) {
   var files=fs.readdirSync(startPath);
@@ -202,12 +200,8 @@ function generatePlugins (envMode) {
 }
 
 const htmlPlugins = generateHtmlPlugins('./src');
-
 const buildPlugins = generatePlugins(runMod);
-
 const moduleRules = generateModRules(runMod);
-
-
 
 module.exports = smp.wrap({
   entry:  path.resolve(__dirname, 'index.js'),

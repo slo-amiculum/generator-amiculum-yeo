@@ -43,28 +43,29 @@ Once everything is installed, you will see a project structure like below:
 
 ```
 ├── src
-|   ├── _data                  # JSON files that add data to templates
-|   ├── _fonts                 # Font files
-|   ├── _images                # Images
-|   ├── _layouts               # Layout structure for app
+|   ├── _data                       # JSON files that add data to templates
+|   ├── _fonts                      # Font files
+|   ├── _images                     # Images
+|   ├── _layouts                    # Layout structure for app
 |   |   └── base.jade
-|   ├── _modules               # Reusable modules
-|   |   └── button
-|   |       ├── button.pug
-|   |       ├── button.js
-|   |       └── button.scss
-|   ├── _styles               # Global styles, mixins, variables, etc
-        ├── _fonts.scss       # Custom font entries
-|   |   └── main.scss         # Main stylesheet (import everything to this file)
-|   ├── _scripts              # Global scripts, base classes, etc
-|   |   └── index.js          # Main bootstrap file
-|   ├── _fonts                # Fonts (Example, will not be generated)
-|   ├── index.jade            # Homepage template
+|   ├── _modules                    # Reusable modules
+|   |   └── atoms                   # Modules are separated by Atomic Design
+|   |         └── button
+|   |           ├── button.pug
+|   |           ├── button.js
+|   |           └── button.scss
+|   ├── _scripts                    # Global scripts, base classes, etc
+|   |   └── index.js                # Main bootstrap file
+|   ├── _styles                     # Global styles, mixins, variables, etc
+        ├── _fonts.scss             # Custom font entries
+|   |   └── main.scss               # Main stylesheet (import everything to this file)
+|   ├── api                         # JSON files that are used for local API call
+|   ├── index.jade                  # Homepage template
 |   ├── favicon.ico
-|   └── robots.txt
-├── webpack.config.js         # Webpack Config
-├── postcss.config.js         # Postcss config
-└── package.json              # Dependencies and site/folder configuration
+|   └── robots.txt                  
+├── webpack.config.js               # Webpack Config
+├── postcss.config.js               # Postcss config
+└── package.json                    # Dependencies and site/folder configuration
 ```
 
 Congratulations! You should now have successfully created a YEO project and are ready to start building out your site/app.

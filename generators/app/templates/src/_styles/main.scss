@@ -25,6 +25,10 @@ body {
   line-height: $base-lineheight;
   margin: 0;
   padding: 0;
+
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.2;
+  }
 }
 
 // Default YEO css
@@ -34,49 +38,26 @@ body {
   justify-content: center;
   flex-direction: column;
   min-height: 100vh;
+
+  .title {
+    margin: 0;
+  }
   
   .logo {
-    width: 280px;
+    width: 180px;
     height: auto;
-    margin: 0 auto;
+    margin: 1em auto;
 
     .hexagon {
-      animation: rotate 3s linear 1;
-      -webkit-animation: rotate 3s linear 1;
-      -moz-animation: rotate 3s linear 1;
+      animation: rotate 80s ease-in-out infinite;
       position: relative;
       transform-box: fill-box;
       transform-origin: center;
-      -webkit-transform-box: fill-box;
-      -webkit-transform-origin: center;
-      animation-delay: 3s;
-      -webkit-animation-delay: 3s;
-      -moz-animation-delay: 3s;
+      animation-delay: 15s;
     }
     
     @keyframes rotate {
-      from { 
-        transform: rotate(0deg); 
-      }
-      to {
-        transform: rotate(360deg);
-      }
-    }
-    
-    @-webkit-keyframes rotate {
-      from { 
-        -webkit-transform: rotate(0deg); 
-      }
-      to {
-        -webkit-transform: rotate(360deg);
-      }
-    }
-    
-    @-moz-keyframes rotate {
-      from { 
-        transform: rotate(0deg); 
-      }
-      to {
+      10%, 100% {
         transform: rotate(360deg);
       }
     }
