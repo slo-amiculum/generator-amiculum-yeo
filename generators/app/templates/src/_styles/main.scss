@@ -48,17 +48,22 @@ body {
     height: auto;
     margin: 1em auto;
 
+    img {
+      width: 100%;
+      height: auto;
+    }
+
     .hexagon {
       animation: rotate 80s ease-in-out infinite;
       position: relative;
       transform-box: fill-box;
       transform-origin: center;
-      animation-delay: 15s;
+      animation-delay: 8s;
     }
     
     @keyframes rotate {
       10%, 100% {
-        transform: rotate(360deg);
+        transform: rotate(-360deg);
       }
     }
   }
