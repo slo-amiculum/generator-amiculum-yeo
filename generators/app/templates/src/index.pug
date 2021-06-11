@@ -3,6 +3,8 @@ extends _layouts/base
 include ./_modules/atoms/button/button
 
 block config
+  - isHome = true
+  - var pageTitle = 'Amiculum Digital'
   - var page = 'homepage'
   - var site = htmlWebpackPlugin.options //global site data
 
@@ -27,17 +29,17 @@ block content
             stop(stop-color='#FBBA00')
             stop(offset='1' stop-color='#F39200')
 
-    h1.font-bold.text-center= site.data.info.title
+    h1.text-yellow-500.font-bold.text-center= site.data.info.title
     
     p.text-center Thank you for using Amiculum YEO site generator,
       br 
       | To learn more about 
-      strong Amiculum Digital - Site Generator
+      strong.text-yellow-500 Amiculum Digital - Site Generator
       |, click on the button below
     
     +button({
-      "__class": "my-10",
-      "__text": "Learn More", 
+      "__class": "my-10 ring-4 ring-yellow-500 ring-opacity-50",
+      "__text": "Learn More 2", 
       "__link": "https://www.npmjs.com/package/generator-yeo",
       "__target": "_blank"
     })

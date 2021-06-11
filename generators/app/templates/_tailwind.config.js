@@ -1,6 +1,13 @@
 module.exports = {
   purge: {
-    content: ['./src/**/*.html'],
+    enabled: process.env.NODE_ENV === 'production',
+    content: [
+      './src/*.html',
+      './src/**/*.html',
+      './src/*.pug',
+      './src/**/*.pug',
+      './src/**/*.js'
+    ],
     safelist: [
       /^js-/
     ],
@@ -22,4 +29,7 @@ module.exports = {
     extend: {},
   },
   plugins: [],
+  future: {
+    purgeLayersByDefault: process.env.NODE_ENV === 'production',
+  },
 }

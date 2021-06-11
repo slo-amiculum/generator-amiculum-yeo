@@ -1,6 +1,8 @@
 //- Custom Configuration
 block config
   //- Otherwise default to relative pathing
+  - var pageTitle = 'Amiculum Digital'
+  - var isHome = false
   - var baseUrl = './'
   - var site = htmlWebpackPlugin.options
 
@@ -16,7 +18,7 @@ doctype html
 head
   meta(charset='utf-8')
   meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
-  title <%= name %>
+  title= (isHome) ? pageTitle : 'Amiculum Digital | ' + pageTitle
   meta(name='description', content= 'Media Literacy Council')
   meta(name='viewport', content='width=device-width, initial-scale=1.0')
   block stylesheets

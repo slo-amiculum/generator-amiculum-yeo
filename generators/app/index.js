@@ -17,6 +17,12 @@ module.exports = class extends Generator {
 			},
 			{
 				type: 'input',
+				name: 'projDesc',
+				message: 'Enter project description',
+				default: 'An Amiculum Digital prototype project' // Default
+			},
+			{
+				type: 'input',
 				name: 'authorName',
 				message: 'Enter author name',
 				default: this.appname // Default
@@ -39,6 +45,7 @@ module.exports = class extends Generator {
 	writing() {
 		let projectName = String(this.props.name).replace(' ', '-');
 		this.config.set('project', projectName);
+		this.config.set('description', this.props.projDesc);
 		this.config.set('author', this.props.authorName);
 		this.config.set('jsPreprocessor', this.props.jsPreprocessor);
 		this.fs.copyTpl(
@@ -46,6 +53,7 @@ module.exports = class extends Generator {
 			this.destinationPath('package.json'),
 			{
 				name: projectName,
+				projDesc: this.props.projDesc,
 				authorName: this.props.authorName
 			}
 		);

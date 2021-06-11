@@ -23,10 +23,12 @@ let runMod = "development";
 
 if (process.argv.indexOf('--dev') === -1) {
   console.log('Running production build......');
-  runMod = 'production'
+  runMod = 'production';
+  process.env.NODE_ENV = 'production';
 } else {
   console.log('Running development build......');
   runMod = 'development'
+  process.env.NODE_ENV = 'development';
 }
 
 function loadJsonFiles(startPath, parentObj) {
