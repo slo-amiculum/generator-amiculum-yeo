@@ -47,27 +47,25 @@ function loadJsonFiles(startPath, parentObj) {
 loadJsonFiles('./src/_data', siteData);
 
 function findFilesInDir(startPath,filter){
-
   var results = [];
 
   if (!fs.existsSync(startPath)){
-      console.log("no dir ",startPath);
-      return;
+    console.log("no dir ",startPath);
+    return;
   }
 
   var files=fs.readdirSync(startPath);
   for(var i=0;i<files.length;i++){
-      var filename=path.join(startPath,files[i]);
-      var stat = fs.lstatSync(filename);
-      if (stat.isDirectory()){
-          results = results.concat(findFilesInDir(filename,filter)); //recurse
-      }
-      else if ((filename.indexOf(filter)>=0) && (filename.indexOf('_modules') === -1) && (filename.indexOf('_layouts') === -1)) {
-          //console.log('-- found: ',filename);
-        var actualFilename = filename.replace('src/','');
-        actualFilename = actualFilename.replace(/src\\/g, '');
-        results.push(actualFilename);
-      }
+    var filename=path.join(startPath,files[i]);
+    var stat = fs.lstatSync(filename);
+    if (stat.isDirectory()){
+      results = results.concat(findFilesInDir(filename,filter)); //recurse
+    }
+    else if ((filename.indexOf(filter)>=0) && (filename.indexOf('_modules') === -1) && (filename.indexOf('_layouts') === -1)) {
+      var actualFilename = filename.replace('src/','');
+      actualFilename = actualFilename.replace(/src\\/g, '');
+      results.push(actualFilename);
+    }
   }
   return results;
 }
@@ -96,7 +94,6 @@ function generateHtmlPlugins (templateDir) {
 
 
 function generateModRules(envMode) {
-
   const devModRules = [
     {
       test: /\.js$/,
@@ -146,9 +143,7 @@ function generateModRules(envMode) {
   }
 }
 
-
 function generatePlugins (envMode) {
-
   const devPlugins = [
     new webpack.HotModuleReplacementPlugin(),
 
@@ -175,13 +170,10 @@ function generatePlugins (envMode) {
         reload: true,
         injectCss: true
       },
-
     )
   ]
 
-
   const prodPlugins = [
-
     new ImageminPlugin({
       test: /\.(jpe?g|png|gif|svg)$/i,
       plugins: [
@@ -192,7 +184,6 @@ function generatePlugins (envMode) {
       ]
     })
   ]
-
 
   if ( envMode === 'production') {
     return prodPlugins;
