@@ -25,14 +25,23 @@ module.exports = class extends Generator {
 				type: 'input',
 				name: 'authorName',
 				message: 'Enter author name',
-				default: this.appname // Default
+				default: "Author's Name" // Default
 			},
+			// JS Preprocessor option
 			{
 				type: 'list',
 				name: 'jsPreprocessor',
 				message: `What ${chalk.blue('JavaScript preprocessor')} would you like to use?`,
 				choices: ['none', 'ES6(using babel)'],
 				default: 'ES6(using babel)' // Default
+			},
+			// Tailwind version option
+			{
+				type: 'list',
+				name: 'tailwindCSS',
+				message: `What ${chalk.blue('Tailwind CSS version')} would you like to use?`,
+				choices: ['1.9.6', '2.1.4'],
+				default: '1.9.6' // Default
 			}
 		];
 
@@ -48,13 +57,15 @@ module.exports = class extends Generator {
 		this.config.set('description', this.props.projDesc);
 		this.config.set('author', this.props.authorName);
 		this.config.set('jsPreprocessor', this.props.jsPreprocessor);
+		this.config.set('tailwindCSS', this.props.tailwindCSS);
 		this.fs.copyTpl(
 			this.templatePath('_package.json'),
 			this.destinationPath('package.json'),
 			{
 				name: projectName,
 				projDesc: this.props.projDesc,
-				authorName: this.props.authorName
+				authorName: this.props.authorName,
+				tailwindCSS: this.props.tailwindCSS
 			}
 		);
 		this.fs.copyTpl(this.templatePath('_index.js'), this.destinationPath('index.js'), {

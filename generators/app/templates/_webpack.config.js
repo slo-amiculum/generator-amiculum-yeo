@@ -48,7 +48,6 @@ loadJsonFiles('./src/_data', siteData);
 
 function findFilesInDir(startPath,filter){
   var results = [];
-
   if (!fs.existsSync(startPath)){
     console.log("no dir ",startPath);
     return;
@@ -91,7 +90,6 @@ function generateHtmlPlugins (templateDir) {
     })
   })
 }
-
 
 function generateModRules(envMode) {
   const devModRules = [

@@ -1,8 +1,14 @@
 extends ../_layouts/base
 
+//- Sample Module import
+//- include ../_modules/atoms/module-name/module-name
+
 block config
   //- Correct base url pathing for this page
   - var baseUrl = '../'
+  - isHome = false
+  - var pageTitle = 'Page Title'
+  - var page = '<%= name %>'
 
 block content
   p <%= name %> page
