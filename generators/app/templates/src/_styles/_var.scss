@@ -25,4 +25,7 @@ $black: 900;
 /* Colors */
 $white: #fff;
 $blck: #000;
-$orange: #f39200;
+
+/* Colors using Tailwind config settings */
+$orange50: theme('colors.orange.50'); 
+$orange: theme('colors.orange.500');

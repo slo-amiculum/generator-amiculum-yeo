@@ -18,12 +18,26 @@ module.exports = {
     }
   },
   theme: {
-    colors: {},
+    //- Add custom color palette here
+    colors: {
+      "orange": {
+        "50": "#ffc432",
+        "100": "#ffba28",
+        "200": "#ffb01e",
+        "300": "#ffa614",
+        "400": "#fd9c0a",
+        "500": "#f39200",
+        "600": "#e98800",
+        "700": "#df7e00",
+        "800": "#d57400",
+        "900": "#cb6a00"
+      }
+    },
     container: {
       center: true,
       padding: '2rem'
     },
-    //custom width classes for pug as pug cannot use '/'
+    //- Custom width classes for pug as pug cannot use '/'
     width: {
       'auto': 'auto',
       'px': '1px',

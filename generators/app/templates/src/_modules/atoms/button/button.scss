@@ -6,10 +6,16 @@
   border: 2px solid $orange;
   text-decoration: none;
   border-radius: 5px;
+  box-shadow: none;
   transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 
   &:hover {
-    background-color: transparent;
     color: $blck;
+    background-color: transparent;
+    box-shadow: 0 0 0 5px $orange50;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 5px $orange50;
   }
 }

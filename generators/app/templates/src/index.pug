@@ -29,16 +29,16 @@ block content
             stop(stop-color='#FBBA00')
             stop(offset='1' stop-color='#F39200')
 
-    h1.text-yellow-500.font-bold.text-center= site.data.info.title
+    h1.text-orange-500.font-bold.text-center.text-3xl= site.data.info.title
     
     p.text-center Thank you for using Amiculum YEO site generator,
       br 
       | To learn more about 
-      strong.text-yellow-500 Amiculum Digital - Site Generator
+      strong.text-orange-500 Amiculum Digital - Site Generator
       |, click on the button below
     
     +button({
-      "__class": "my-10 ring-4 ring-yellow-500 ring-opacity-50",
+      "__class": "my-10",
       "__text": "Learn More", 
       "__link": "https://www.npmjs.com/package/generator-yeo",
       "__target": "_blank"
