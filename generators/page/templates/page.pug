@@ -9,6 +9,9 @@ block config
   - isHome = false
   - var pageTitle = 'Page Title'
   - var page = '<%= name %>'
+  - var site = htmlWebpackPlugin.options //global site data
+  - var env = site.env
+  - var dir = site.name
 
 block content
   p <%= name %> page

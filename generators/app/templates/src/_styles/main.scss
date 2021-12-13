@@ -1,3 +1,7 @@
+// Path used for Background URL
+// i.e. background: url($path + 'assets/images/sample_img.jpg);
+// $path will change dynamically based on the env
+
 // Tailwind
 @tailwind base;
 @tailwind components;
@@ -38,11 +42,14 @@ body {
 
 // Default YEO css
 .yeo-info {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   min-height: 100vh;
+  background-size: cover;
+  background: url($path + 'assets/images/hexagon_bg.jpg') no-repeat center bottom;
 
   .logo {
     width: 180px;

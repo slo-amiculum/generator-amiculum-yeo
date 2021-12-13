@@ -5,6 +5,8 @@ block config
   - var isHome = false
   - var baseUrl = './'
   - var site = htmlWebpackPlugin.options
+  - var env = site.env
+  - var dir = site.directory
 
 doctype html
 
@@ -21,9 +23,9 @@ head
   title= (isHome) ? pageTitle : 'Amiculum Digital | ' + pageTitle
   meta(name='description', content= 'Media Literacy Council')
   meta(name='viewport', content='width=device-width, initial-scale=1.0')
-  link(rel='icon' type='image/png' href='/favicon.ico')
+  link(rel='icon' type='image/png' href=(env === 'stg') ? `/${dir}/favicon.ico` : '/favicon.ico')
   block stylesheets
-    link(rel='stylesheet', href= '/assets/styles/main.css')
+    link(rel='stylesheet', href=(env === 'stg') ? `/${dir}/assets/styles/main.css` : '/assets/styles/main.css')
 
 body
   <!--[if lt IE 9]>
@@ -35,6 +37,6 @@ body
       block content
 
   block scripts
-    script(src= '/assets/scripts/main.js')
+    script(src=(env === 'stg') ? `/${dir}/assets/scripts/main.js` : '/assets/scripts/main.js')
 
 </html>

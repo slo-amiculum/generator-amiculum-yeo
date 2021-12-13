@@ -16,19 +16,22 @@ const happyThreadPool = HappyPack.ThreadPool({ size: 4 });
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const PACKAGE = require('./package.json');
 const assetPath = PACKAGE.assetPath;
+const projName = PACKAGE.name;
 
 const siteData = multiJsonLoader.loadFiles('./src/_data');
 
 let runMod = "development";
 
 if (process.argv.indexOf('--dev') === -1) {
-  console.log('Running production build......');
   runMod = 'production';
   process.env.NODE_ENV = 'production';
+  console.log('Running production build......');
+  console.log('Assets will be created at ', assetPath);
 } else {
-  console.log('Running development build......');
-  runMod = 'development'
+  runMod = 'development';
   process.env.NODE_ENV = 'development';
+  console.log('Running development build......');
+  console.log('Assets will be created at ', assetPath);
 }
 
 function loadJsonFiles(startPath, parentObj) {
@@ -69,7 +72,7 @@ function findFilesInDir(startPath,filter){
   return results;
 }
 
-function generateHtmlPlugins (templateDir) {
+function generateHtmlPlugins (templateDir,envPath) {
   // Read files in template directory
   const templateFiles = findFilesInDir(templateDir,'.pug');
   return templateFiles.map(item => {
@@ -86,7 +89,9 @@ function generateHtmlPlugins (templateDir) {
       hash: false,
       inject: false,
       alwaysWriteToDisk: true,
-      data: siteData
+      data: siteData,
+      env: envPath,
+      directory: projName,
     })
   })
 }
@@ -104,7 +109,13 @@ function generateModRules(envMode) {
         MiniCssExtractPlugin.loader,
         'css-loader',
         'postcss-loader',
-        'fast-sass-loader',
+        // 'fast-sass-loader',
+        {
+          loader: "fast-sass-loader",
+          options: {
+            data: '$path: "/";'
+          }
+        }
       ],
     },
     {
@@ -125,7 +136,40 @@ function generateModRules(envMode) {
         MiniCssExtractPlugin.loader,
         'css-loader',
         'postcss-loader',
-        'fast-sass-loader',
+        // 'fast-sass-loader',
+        {
+          loader: "fast-sass-loader",
+          options: {
+            data: '$path: "/";'
+          }
+        }
+      ],
+    },
+    {
+      test: /\.pug$/,
+      use: "pug-loader?pretty=true"
+    }
+  ]
+
+  const stgModRules = [
+    {
+      test: /\.js$/,
+      exclude: /node_modules/,
+      use: "babel-loader?cacheDirectory"
+    },
+    {
+      test: /\.(sa|sc|c)ss$/,
+      use: [
+        MiniCssExtractPlugin.loader,
+        'css-loader',
+        'postcss-loader',
+        // 'fast-sass-loader',
+        {
+          loader: "fast-sass-loader",
+          options: {
+            data: '$path: "/' + projName + '/";'
+          }
+        }
       ],
     },
     {
@@ -135,7 +179,11 @@ function generateModRules(envMode) {
   ]
 
   if (envMode === 'production') {
-    return prodModRules;
+    if (process.argv.indexOf('--prod') === -1) {
+      return stgModRules;
+    } else {
+      return prodModRules;
+    }
   } else {
     return devModRules;
   }
@@ -190,16 +238,50 @@ function generatePlugins (envMode) {
   }
 }
 
-const htmlPlugins = generateHtmlPlugins('./src');
+function generateDist (envMode) {
+  const devPath = "";
+  const prodPath = "";
+  const stgPath = `/${projName}`;
+
+  if (envMode === 'production') {
+    if (process.argv.indexOf('--prod') === -1) {
+      return stgPath;
+    } else {
+      return prodPath;
+    }
+  } else {
+    return devPath;
+  }
+}
+
+function generateEnv (envMode) {
+  const devEnv = "dev";
+  const prodEnv = "prod";
+  const stgEnv = "stg";
+
+  if (envMode === 'production') {
+    if (process.argv.indexOf('--prod') === -1) {
+      return stgEnv;
+    } else {
+      return prodEnv;
+    }
+  } else {
+    return devEnv;
+  }
+}
+
+const envRules = generateEnv(runMod);
+const htmlPlugins = generateHtmlPlugins('./src', envRules);
 const buildPlugins = generatePlugins(runMod);
 const moduleRules = generateModRules(runMod);
+const distRules = generateDist(runMod);
 
 module.exports = smp.wrap({
   entry:  path.resolve(__dirname, 'index.js'),
   mode: process.env.NODE_ENV,
   output: {
     filename: `${assetPath}/scripts/main.js`,
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dist' + distRules),
     publicPath: "/"
   },
   module: {
@@ -225,7 +307,7 @@ module.exports = smp.wrap({
     })
   ].concat(htmlPlugins, buildPlugins),
   devServer: {
-    contentBase: path.resolve(__dirname, 'dist'),
+    contentBase: path.resolve(__dirname, 'dist' + distRules),
     watchContentBase: true,
     publicPath: '/',
     hot:false,
