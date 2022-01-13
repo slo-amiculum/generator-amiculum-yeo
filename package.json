@@ -1,6 +1,6 @@
 {
 	"name": "generator-yeo",
-	"version": "1.0.23",
+	"version": "1.0.24",
 	"description": "Static site generator for Amiculum Digital projects based on Webpack!",
 	"homepage": "https://github.com/slo-amiculum/generator-amiculum-yeo",
 	"author": "Stephen Orioste <stephen.orioste@amiculum.biz>",
