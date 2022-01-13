@@ -35,5 +35,6 @@ Code Management
 This project uses [WEBPACK](https://webpack.js.org/) to run automated tasks for development and production builds.
 The tasks are as follows:
 
-- `npm run build`: Compiles preprocessors copy production ready code to dist folder
-- `npm run dev`: Compiles preprocessors and boots up development server
+- `npm run build`: &nbsp;Compiles preprocessors copy production ready code to dist folder
+- `npm run dev`: &nbsp;Compiles preprocessors copy development server ready code to `<%= name %>` folder
+- `npm run serve`: &nbsp;Compiles preprocessors and boots up localhost server

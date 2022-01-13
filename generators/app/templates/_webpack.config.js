@@ -20,18 +20,25 @@ const projName = PACKAGE.name;
 
 const siteData = multiJsonLoader.loadFiles('./src/_data');
 
-let runMod = "development";
+let runMod = 'development';
 
-if (process.argv.indexOf('--dev') === -1) {
-  runMod = 'production';
-  process.env.NODE_ENV = 'production';
-  console.log('Running production build......');
-  console.log('Assets will be created at ', assetPath);
+if (process.argv.indexOf('development') === -1) {
+  if (process.argv.indexOf('production') === -1) {
+    runMod = 'devServer';
+    process.env.NODE_ENV = 'devServer';
+    console.log(process.argv);
+    console.log('Running Dev-Server build......');
+  } else {
+    runMod = 'production';
+    process.env.NODE_ENV = 'production';
+    console.log(process.argv);
+    console.log('Running Production build......');
+  }
 } else {
   runMod = 'development';
   process.env.NODE_ENV = 'development';
-  console.log('Running development build......');
-  console.log('Assets will be created at ', assetPath);
+  console.log(process.argv);
+  console.log('Running Local build......');
 }
 
 function loadJsonFiles(startPath, parentObj) {
@@ -101,15 +108,25 @@ function generateModRules(envMode) {
     {
       test: /\.js$/,
       exclude: /node_modules/,
-      use: "happypack/loader?id=js"
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: ['@babel/preset-env'],
+        },
+      }
     },
     {
       test: /\.(sa|sc|c)ss$/,
       use: [
         MiniCssExtractPlugin.loader,
-        'css-loader',
+        { 
+          loader: 'css-loader', 
+          options: { 
+            url: false,
+            esModule: true
+          } 
+        },
         'postcss-loader',
-        // 'fast-sass-loader',
         {
           loader: "fast-sass-loader",
           options: {
@@ -120,7 +137,7 @@ function generateModRules(envMode) {
     },
     {
       test: /\.pug$/,
-      use: "happypack/loader?id=html"
+      use: ["pug-loader"]
     }
   ]
 
@@ -134,9 +151,13 @@ function generateModRules(envMode) {
       test: /\.(sa|sc|c)ss$/,
       use: [
         MiniCssExtractPlugin.loader,
-        'css-loader',
+        { 
+          loader: 'css-loader', 
+          options: { 
+            url: false 
+          } 
+        },
         'postcss-loader',
-        // 'fast-sass-loader',
         {
           loader: "fast-sass-loader",
           options: {
@@ -161,9 +182,13 @@ function generateModRules(envMode) {
       test: /\.(sa|sc|c)ss$/,
       use: [
         MiniCssExtractPlugin.loader,
-        'css-loader',
+        { 
+          loader: 'css-loader', 
+          options: { 
+            url: false 
+          } 
+        },
         'postcss-loader',
-        // 'fast-sass-loader',
         {
           loader: "fast-sass-loader",
           options: {
@@ -178,12 +203,10 @@ function generateModRules(envMode) {
     }
   ]
 
-  if (envMode === 'production') {
-    if (process.argv.indexOf('--prod') === -1) {
-      return stgModRules;
-    } else {
-      return prodModRules;
-    }
+  if (envMode === 'devServer') {
+    return stgModRules;
+  } else if (envMode === 'production') {
+    return prodModRules;
   } else {
     return devModRules;
   }
@@ -192,18 +215,6 @@ function generateModRules(envMode) {
 function generatePlugins (envMode) {
   const devPlugins = [
     new webpack.HotModuleReplacementPlugin(),
-
-    new HappyPack({
-      id: 'html',
-      loaders: ['pug-loader?pretty=true'],
-      threadPool: happyThreadPool
-    }),
-
-    new HappyPack({
-      id: 'js',
-      loaders: ['babel-loader?cacheDirectory' ],
-      threadPool: happyThreadPool
-    }),
 
     new BrowserSyncPlugin(
       {
@@ -243,12 +254,10 @@ function generateDist (envMode) {
   const prodPath = "";
   const stgPath = `/${projName}`;
 
-  if (envMode === 'production') {
-    if (process.argv.indexOf('--prod') === -1) {
-      return stgPath;
-    } else {
-      return prodPath;
-    }
+  if (envMode === 'devServer') {
+    return stgPath;
+  } else if (envMode === 'production') {
+    return prodPath;
   } else {
     return devPath;
   }
@@ -259,12 +268,10 @@ function generateEnv (envMode) {
   const prodEnv = "prod";
   const stgEnv = "stg";
 
-  if (envMode === 'production') {
-    if (process.argv.indexOf('--prod') === -1) {
-      return stgEnv;
-    } else {
-      return prodEnv;
-    }
+  if (envMode === 'devServer') {
+    return stgEnv;
+  } else if (envMode === 'production') {
+    return prodEnv;
   } else {
     return devEnv;
   }
@@ -276,7 +283,7 @@ const buildPlugins = generatePlugins(runMod);
 const moduleRules = generateModRules(runMod);
 const distRules = generateDist(runMod);
 
-module.exports = smp.wrap({
+module.exports = {
   entry:  path.resolve(__dirname, 'index.js'),
   mode: process.env.NODE_ENV,
   output: {
@@ -289,11 +296,25 @@ module.exports = smp.wrap({
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new CopyWebpackPlugin([
-      {from:'src/_images',to:`${assetPath}/images`},
-      {from:'src/_fonts',to:`${assetPath}/fonts`},
-      {from:'**/*',ignore:['{**/\_*,**/\_*/**}','**/*.pug'],context: 'src/'}
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'src/_images',
+          to: `${assetPath}/images`,
+        },
+        {
+          from: 'src/_fonts',
+          to: `${assetPath}/fonts`,
+        },
+        {
+          from: '**/*',
+          globOptions: {
+            ignore:['{**/\_*,**/\_*/**}','**/*.pug'],
+          },
+          context: 'src/',
+        }
+      ]
+    }),
 
     new webpack.ProvidePlugin({
       $: 'jquery',
@@ -307,12 +328,29 @@ module.exports = smp.wrap({
     })
   ].concat(htmlPlugins, buildPlugins),
   devServer: {
-    contentBase: path.resolve(__dirname, 'dist' + distRules),
-    watchContentBase: true,
-    publicPath: '/',
+    static: {
+      directory: path.resolve(__dirname, 'dist' + distRules),
+      publicPath: '/',
+      watch: true,
+    },
     hot:false,
-    inline: true,
     port: 3000
+  },
+  resolve: {
+    modules: [
+      "node_modules"
+    ],
+    alias: {
+
+    }
+  },
+  resolve: {
+    modules: [
+      "node_modules"
+    ],
+    alias: {
+
+    }
   },
   resolve: {
     modules: [
@@ -330,4 +368,4 @@ module.exports = smp.wrap({
       }),
     ],
   },
-});
+};

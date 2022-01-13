@@ -40,7 +40,7 @@ module.exports = class extends Generator {
 				type: 'list',
 				name: 'tailwindCSS',
 				message: `What ${chalk.blue('Tailwind CSS version')} would you like to use?`,
-				choices: ['1.9.6', '2.1.4'],
+				choices: ['1.9.6', '2.1.4', '3.0.12'],
 				default: '1.9.6' // Default
 			}
 		];
