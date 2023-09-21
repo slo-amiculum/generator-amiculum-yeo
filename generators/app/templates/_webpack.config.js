@@ -1,24 +1,65 @@
 const path = require('path');
-const fs = require('fs')
+const fs = require('fs');
+const glob = require('glob');
+const loaderUtils = require('loader-utils');
 const webpack = require('webpack');
-const HappyPack = require('happypack');
-const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const ImageminPlugin = require('imagemin-webpack-plugin').default;
-const imageminMozjpeg = require('imagemin-mozjpeg');
-const multiJsonLoader = require('multi-json-loader');
-const smp = new SpeedMeasurePlugin();
-const happyThreadPool = HappyPack.ThreadPool({ size: 4 });
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
+const PugPlugin = require('pug-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+
 const PACKAGE = require('./package.json');
 const assetPath = PACKAGE.assetPath;
 const projName = PACKAGE.name;
 
-const siteData = multiJsonLoader.loadFiles('./src/_data');
+// Aggregating JSON functions - Start
+function pitch() {
+  var query = loaderUtils.parseQuery(this.query);
+
+  var results = loadFiles(query.cwd, query.glob, this.addContextDependency.bind(this));
+
+  this.cacheable && this.cacheable();
+  this.value = [ results ];
+
+  return JSON.stringify(results, null, '\t');
+}
+
+function loadFiles(cwd, fileGlob, addContextDependency) {
+  var absoluteCwd = path.resolve(cwd || '');
+  var currentGlob = fileGlob || '*.json';
+  var results = {};
+
+  glob.sync(currentGlob, {
+    cwd: absoluteCwd
+  }).forEach(function(filePath) {
+    var absoluteFilePath = path.join(absoluteCwd, filePath);
+    var parsedAbsoluteFilePath = path.parse(absoluteFilePath);
+
+    if (typeof addContextDependency === 'function') {
+      addContextDependency(parsedAbsoluteFilePath.dir);
+    }
+
+    var extension = parsedAbsoluteFilePath.ext;
+    var end = -1 * extension.length;
+    var parts = filePath.slice(0, end).split(path.sep);
+    var last = parts.length - 1;
+    parts.reduce(function(root, part, idx) {
+      if (idx == last) root[part] = JSON.parse(fs.readFileSync(absoluteFilePath));
+      else if (!(part in root)) root[part] = {};
+      return root[part];
+    }, results);
+  });
+
+  return results;
+}
+// Aggregating JSON functions - End
+
+const siteData = loadFiles('./src/_data');
 
 let runMod = 'development';
 
@@ -42,13 +83,13 @@ if (process.argv.indexOf('development') === -1) {
 }
 
 function loadJsonFiles(startPath, parentObj) {
-  var files=fs.readdirSync(startPath);
+  var files = fs.readdirSync(startPath);
 
-  for(var i=0;i<files.length;i++){
-    var filename=path.join(startPath,files[i]);
+  for(var i=0; i < files.length; i++){
+    var filename = path.join(startPath, files[i]);
     var stat = fs.lstatSync(filename);
     if (stat.isDirectory()){
-      parentObj[`${files[i]}`] = multiJsonLoader.loadFiles(filename);
+      parentObj[`${files[i]}`] = loadFiles(filename);
       loadJsonFiles(filename, parentObj[`${files[i]}`]);
     }
   }
@@ -111,9 +152,16 @@ function generateModRules(envMode) {
       use: {
         loader: 'babel-loader',
         options: {
-          presets: ['@babel/preset-env'],
+          presets: [
+            ['@babel/preset-env', { targets: "defaults" }]
+          ],
+          plugins: ['@babel/plugin-transform-runtime']
         },
       }
+    },
+    {
+      test: /\.geojson$/,
+      type: 'json',
     },
     {
       test: /\.(sa|sc|c)ss$/,
@@ -128,16 +176,16 @@ function generateModRules(envMode) {
         },
         'postcss-loader',
         {
-          loader: "fast-sass-loader",
+          loader: "sass-loader",
           options: {
-            data: '$path: "/";'
+            additionalData: '$path: "/";'
           }
         }
       ],
     },
     {
       test: /\.pug$/,
-      use: ["pug-loader"]
+      loader: PugPlugin.loader
     }
   ]
 
@@ -159,16 +207,16 @@ function generateModRules(envMode) {
         },
         'postcss-loader',
         {
-          loader: "fast-sass-loader",
+          loader: "sass-loader",
           options: {
-            data: '$path: "/";'
+            additionalData: '$path: "/";'
           }
         }
       ],
     },
     {
       test: /\.pug$/,
-      use: "pug-loader?pretty=true"
+      loader: PugPlugin.loader
     }
   ]
 
@@ -190,16 +238,16 @@ function generateModRules(envMode) {
         },
         'postcss-loader',
         {
-          loader: "fast-sass-loader",
+          loader: "sass-loader",
           options: {
-            data: '$path: "/' + projName + '/";'
+            additionalData: '$path: "/' + projName + '/";'
           }
         }
       ],
     },
     {
       test: /\.pug$/,
-      use: "pug-loader?pretty=true"
+      loader: PugPlugin.loader
     }
   ]
 
@@ -231,15 +279,21 @@ function generatePlugins (envMode) {
   ]
 
   const prodPlugins = [
-    new ImageminPlugin({
-      test: /\.(jpe?g|png|gif|svg)$/i,
-      plugins: [
-        imageminMozjpeg({
-          quality: 70,
-          progressive: true
-        })
-      ]
-    })
+    new ImageMinimizerPlugin({
+      minimizer: {
+        implementation: ImageMinimizerPlugin.sharpMinify,
+        options: {
+          encodeOptions: {
+            jpeg: {
+              quality: 70,
+            },
+            png: {
+              quality: 70,
+            },
+          },
+        },
+      },
+    })    
   ]
 
   if ( envMode === 'production') {
@@ -299,12 +353,20 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         {
+          from: 'src/_data',
+          to: `${assetPath}/data`,
+        },
+        {
           from: 'src/_images',
           to: `${assetPath}/images`,
         },
         {
           from: 'src/_fonts',
           to: `${assetPath}/fonts`,
+        },
+        {
+          from:'src/_icomoon/fonts',
+          to:`${assetPath}/fonts`
         },
         {
           from: '**/*',
@@ -362,10 +424,12 @@ module.exports = {
   },
   optimization: {
     minimizer: [
-      new UglifyJsPlugin({
+      new TerserPlugin({
         test: /\.js(\?.*)?$/i,
         extractComments: true,
       }),
     ],
   },
 };
+
+console.log('site.data: ', siteData);

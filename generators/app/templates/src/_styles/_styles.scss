@@ -107,15 +107,15 @@ Layout
 
 @for $i from 1 through 12 {
   .col-xs-#{$i} {
-    width: (100% / 12 * $i);
+    width: calc(100% / 12 * $i);
   }
 
   .col-offset-xs-#{$i} {
-    margin-left: (100% / 12 * $i);
+    margin-left: calc(100% / 12 * $i);
   }
 }
 
-@media only screen and (max-width: $bpTablet - 1) {
+@media only screen and (max-width: ($bpTablet - 1)) {
   .no-mobile {
     display: none;
   }
@@ -124,11 +124,11 @@ Layout
 @media only screen and (min-width: $bpTablet) {
   @for $i from 1 through 12 {
     .col-sm-#{$i} {
-      width: (100% / 12 * $i);
+      width: calc(100% / 12 * $i);
     }
 
     .col-offset-sm-#{$i} {
-      margin-left: (100% / 12 * $i);
+      margin-left: calc(100% / 12 * $i);
     }
   }
 
@@ -137,7 +137,7 @@ Layout
   }
 }
 
-@media only screen and (min-width: $bpTablet) and (max-width: $bpDesktop - 1) {
+@media only screen and (min-width: $bpTablet) and (max-width: ($bpDesktop - 1)) {
   .tablet-only {
     display: block;
   }
@@ -151,18 +151,18 @@ Layout
   .row {
     &--5-cols {
       .col-all {
-        width: (100% / 5);
+        width: calc(100% / 5);
       }
     }
   }
 
   @for $i from 1 through 12 {
     .col-md-#{$i} {
-      width: (100% / 12 * $i);
+      width: calc(100% / 12 * $i);
     }
 
     .col-offset-md-#{$i} {
-      margin-left: (100% / 12 * $i);
+      margin-left: calc(100% / 12 * $i);
     }
   }
 
@@ -182,11 +182,11 @@ Layout
 
   @for $i from 1 through 12 {
     .col-lg-#{$i} {
-      width: (100% / 12 * $i);
+      width: calc(100% / 12 * $i);
     }
 
     .col-offset-lg-#{$i} {
-      margin-left: (100% / 12 * $i);
+      margin-left: calc(100% / 12 * $i);
     }
   }
 }
