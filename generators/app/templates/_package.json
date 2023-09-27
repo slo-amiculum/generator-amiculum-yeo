@@ -25,7 +25,6 @@
 		"@babel/core": "^7.22.8",
 		"@babel/plugin-transform-runtime": "^7.22.7",
 		"@babel/preset-env": "^7.22.7",
-		"@squoosh/lib": "^0.5.3",
 		"autoprefixer": "^10.4.14",
 		"babel-loader": "^9.1.3",
 		"browser-sync": "^2.29.3",
