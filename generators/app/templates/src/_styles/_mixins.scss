@@ -1,5 +1,5 @@
 @function calc-em($target, $context: $base-fontsize) {
-  @return calc-em($target / $context) * 1em;
+  @return calc($target / $context) * 1em;
 }
 
 @mixin background-gradient($color1, $color2, $direction) {
