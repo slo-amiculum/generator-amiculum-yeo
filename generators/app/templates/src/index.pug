@@ -1,12 +1,14 @@
-extends _layouts/base
+//- Extends base layout ('/src/' is the root path)
+extends /src/_layouts/base
 
-include ./_modules/atoms/button/button
+//- Sample Module import ('/src/' is the root path)
+include /src/_modules/atoms/button/button
 
 block config
   - isHome = true
   - var pageTitle = 'Amiculum Digital'
   - var page = 'homepage'
-  - var site = htmlWebpackPlugin.options //global site data
+  - var site = myData //global site data
   - var env = site.env
   - var dir = site.directory
 

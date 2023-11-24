@@ -12,9 +12,9 @@
 
 // Site Mixins, Variables and Fonts here
 @import "./_mixins";
-@import "./_var";
+@import "./_var"; // Site's variables i.e. colour, fonts and screensize
 @import "./_styles";
-@import "./_fonts";
+@import "./_fonts"; // Added Roboto Fonts as default primary fonts
 
 *,
 *:before,

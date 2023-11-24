@@ -4,7 +4,7 @@ block config
   - var pageTitle = 'Amiculum Digital'
   - var isHome = false
   - var baseUrl = './'
-  - var site = htmlWebpackPlugin.options
+  - var site = myData //global site data
   - var env = site.env
   - var dir = site.directory
 
@@ -38,5 +38,4 @@ body
 
   block scripts
     script(src=(env === 'stg') ? `/${dir}/assets/scripts/main.js` : '/assets/scripts/main.js')
-
 </html>

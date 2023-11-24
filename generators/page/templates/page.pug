@@ -1,15 +1,14 @@
-extends ../_layouts/base
+//- Extends base layout ('/src/' is the root path)
+extends /src/_layouts/base
 
-//- Sample Module import
-//- include ../_modules/atoms/module-name/module-name
+//- Sample Module import ('/src/' is the root path)
+//- include /src/_modules/atoms/module-name/module-name
 
 block config
-  //- Correct base url pathing for this page
-  - var baseUrl = '../'
   - isHome = false
   - var pageTitle = 'Page Title'
   - var page = '<%= name %>'
-  - var site = htmlWebpackPlugin.options //global site data
+  - var site = myData //global site data
   - var env = site.env
   - var dir = site.directory
 

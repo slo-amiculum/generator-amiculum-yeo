@@ -4,12 +4,10 @@ const glob = require('glob');
 const loaderUtils = require('loader-utils');
 const webpack = require('webpack');
 
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
+const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
 const PugPlugin = require('pug-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
@@ -24,7 +22,7 @@ function pitch() {
   var results = loadFiles(query.cwd, query.glob, this.addContextDependency.bind(this));
 
   this.cacheable && this.cacheable();
-  this.value = [ results ];
+  this.value = [results];
 
   return JSON.stringify(results, null, '\t');
 }
@@ -36,7 +34,7 @@ function loadFiles(cwd, fileGlob, addContextDependency) {
 
   glob.sync(currentGlob, {
     cwd: absoluteCwd
-  }).forEach(function(filePath) {
+  }).forEach((filePath) => {
     var absoluteFilePath = path.join(absoluteCwd, filePath);
     var parsedAbsoluteFilePath = path.parse(absoluteFilePath);
 
@@ -48,7 +46,7 @@ function loadFiles(cwd, fileGlob, addContextDependency) {
     var end = -1 * extension.length;
     var parts = filePath.slice(0, end).split(path.sep);
     var last = parts.length - 1;
-    parts.reduce(function(root, part, idx) {
+    parts.reduce((root, part, idx) => {
       if (idx == last) root[part] = JSON.parse(fs.readFileSync(absoluteFilePath));
       else if (!(part in root)) root[part] = {};
       return root[part];
@@ -60,7 +58,6 @@ function loadFiles(cwd, fileGlob, addContextDependency) {
 // Aggregating JSON functions - End
 
 const siteData = loadFiles('./src/_data');
-
 let runMod = 'development';
 
 if (process.argv.indexOf('development') === -1) {
@@ -97,22 +94,22 @@ function loadJsonFiles(startPath, parentObj) {
 
 loadJsonFiles('./src/_data', siteData);
 
-function findFilesInDir(startPath,filter){
+function findFilesInDir(startPath, filter){
   var results = [];
   if (!fs.existsSync(startPath)){
-    console.log("no dir ",startPath);
+    console.log('no dir ', startPath);
     return;
   }
 
-  var files=fs.readdirSync(startPath);
-  for(var i=0;i<files.length;i++){
-    var filename=path.join(startPath,files[i]);
+  var files = fs.readdirSync(startPath);
+  for(var i = 0; i<files.length; i++){
+    var filename = path.join(startPath,files[i]);
     var stat = fs.lstatSync(filename);
     if (stat.isDirectory()){
       results = results.concat(findFilesInDir(filename,filter)); //recurse
     }
-    else if ((filename.indexOf(filter)>=0) && (filename.indexOf('_modules') === -1) && (filename.indexOf('_layouts') === -1)) {
-      var actualFilename = filename.replace('src/','');
+    else if ((filename.indexOf(filter) >= 0) && (filename.indexOf('_modules') === -1) && (filename.indexOf('_layouts') === -1)) {
+      var actualFilename = filename.replace('src/', '');
       actualFilename = actualFilename.replace(/src\\/g, '');
       results.push(actualFilename);
     }
@@ -120,29 +117,53 @@ function findFilesInDir(startPath,filter){
   return results;
 }
 
-function generateHtmlPlugins (templateDir,envPath) {
+function generateDist (envMode) {
+  const devPath = '';
+  const prodPath = '';
+  const stgPath = `/${projName}`;
+
+  if (envMode === 'devServer') {
+    return stgPath;
+  } else if (envMode === 'production') {
+    return prodPath;
+  } else {
+    return devPath;
+  }
+}
+
+function generateHtmlPlugins (templateDir, envPath) {
   // Read files in template directory
   const templateFiles = findFilesInDir(templateDir,'.pug');
-  return templateFiles.map(item => {
-    // Split names and extension
-    const parts = item.split('.')
-    const name = parts[0]
-    const extension = parts[1]
-    // Create new HTMLWebpackPlugin with options
-    return new HtmlWebpackPlugin({
-      filename: `${name}.html`,
-      template: path.resolve(__dirname, `${templateDir}/${name}.${extension}`),
-      cache: true,
-      minify: false,
-      hash: false,
-      inject: false,
-      alwaysWriteToDisk: true,
-      data: siteData,
-      env: envPath,
-      directory: projName,
-    })
-  })
+  const pages = {};
+  templateFiles.forEach((page) => { 
+    const parts = page.split('.');
+    const name = parts[0];
+    let str;
+
+    if (name != 'index') {
+      str = name.replace(/\\/g, '/');
+    } else {
+      str = 'index';
+    }
+
+    pages['assets/scripts/main'] = `${templateDir}/` + '_scripts/main.js';
+    pages['assets/styles/main'] = `${templateDir}/` + '_styles/main.scss';
+    
+    if (page.replace(/\\/g, '/') !== 'index.pug') {
+      pages[str] = `${templateDir}/` + page.replace(/\\/g, '/');
+    } else {
+      pages[str] = `${templateDir}/` + page.replace(/\\/g, '/');
+    }
+  });
+  
+  return pages;
 }
+
+let pugData = {
+  data: siteData,
+  env: generateEnv(runMod),
+  directory: projName,
+};
 
 function generateModRules(envMode) {
   const devModRules = [
@@ -153,7 +174,7 @@ function generateModRules(envMode) {
         loader: 'babel-loader',
         options: {
           presets: [
-            ['@babel/preset-env', { targets: "defaults" }]
+            ['@babel/preset-env', { targets: 'defaults' }]
           ],
           plugins: ['@babel/plugin-transform-runtime']
         },
@@ -165,8 +186,7 @@ function generateModRules(envMode) {
     },
     {
       test: /\.(sa|sc|c)ss$/,
-      use: [
-        MiniCssExtractPlugin.loader,
+      use: [        
         { 
           loader: 'css-loader', 
           options: { 
@@ -176,7 +196,7 @@ function generateModRules(envMode) {
         },
         'postcss-loader',
         {
-          loader: "sass-loader",
+          loader: 'sass-loader',
           options: {
             additionalData: '$path: "/";'
           }
@@ -185,7 +205,12 @@ function generateModRules(envMode) {
     },
     {
       test: /\.pug$/,
-      loader: PugPlugin.loader
+      loader: PugPlugin.loader,
+      options: {
+        data: {
+          myData: pugData
+        }
+      }
     }
   ]
 
@@ -193,12 +218,11 @@ function generateModRules(envMode) {
     {
       test: /\.js$/,
       exclude: /node_modules/,
-      use: "babel-loader?cacheDirectory"
+      use: 'babel-loader?cacheDirectory'
     },
     {
       test: /\.(sa|sc|c)ss$/,
       use: [
-        MiniCssExtractPlugin.loader,
         { 
           loader: 'css-loader', 
           options: { 
@@ -207,7 +231,7 @@ function generateModRules(envMode) {
         },
         'postcss-loader',
         {
-          loader: "sass-loader",
+          loader: 'sass-loader',
           options: {
             additionalData: '$path: "/";'
           }
@@ -216,7 +240,12 @@ function generateModRules(envMode) {
     },
     {
       test: /\.pug$/,
-      loader: PugPlugin.loader
+      loader: PugPlugin.loader,
+      options: {
+        data: {
+          myData: pugData
+        }
+      }
     }
   ]
 
@@ -224,12 +253,11 @@ function generateModRules(envMode) {
     {
       test: /\.js$/,
       exclude: /node_modules/,
-      use: "babel-loader?cacheDirectory"
+      use: 'babel-loader?cacheDirectory'
     },
     {
       test: /\.(sa|sc|c)ss$/,
       use: [
-        MiniCssExtractPlugin.loader,
         { 
           loader: 'css-loader', 
           options: { 
@@ -238,7 +266,7 @@ function generateModRules(envMode) {
         },
         'postcss-loader',
         {
-          loader: "sass-loader",
+          loader: 'sass-loader',
           options: {
             additionalData: '$path: "/' + projName + '/";'
           }
@@ -247,7 +275,12 @@ function generateModRules(envMode) {
     },
     {
       test: /\.pug$/,
-      loader: PugPlugin.loader
+      loader: PugPlugin.loader,
+      options: {
+        data: {
+          myData: pugData
+        }
+      }
     }
   ]
 
@@ -263,7 +296,6 @@ function generateModRules(envMode) {
 function generatePlugins (envMode) {
   const devPlugins = [
     new webpack.HotModuleReplacementPlugin(),
-
     new BrowserSyncPlugin(
       {
         files: ['styles/**/*.css', '**/*.html', '!/assets/**/*'],
@@ -284,12 +316,8 @@ function generatePlugins (envMode) {
         implementation: ImageMinimizerPlugin.sharpMinify,
         options: {
           encodeOptions: {
-            jpeg: {
-              quality: 70,
-            },
-            png: {
-              quality: 70,
-            },
+            jpeg: { quality: 70, },
+            png: { quality: 70, },
           },
         },
       },
@@ -303,24 +331,10 @@ function generatePlugins (envMode) {
   }
 }
 
-function generateDist (envMode) {
-  const devPath = "";
-  const prodPath = "";
-  const stgPath = `/${projName}`;
-
-  if (envMode === 'devServer') {
-    return stgPath;
-  } else if (envMode === 'production') {
-    return prodPath;
-  } else {
-    return devPath;
-  }
-}
-
 function generateEnv (envMode) {
-  const devEnv = "dev";
-  const prodEnv = "prod";
-  const stgEnv = "stg";
+  const devEnv = 'dev';
+  const prodEnv = 'prod';
+  const stgEnv = 'stg';
 
   if (envMode === 'devServer') {
     return stgEnv;
@@ -337,13 +351,14 @@ const buildPlugins = generatePlugins(runMod);
 const moduleRules = generateModRules(runMod);
 const distRules = generateDist(runMod);
 
+console.log('Final Entries:', htmlPlugins);
+
 module.exports = {
-  entry:  path.resolve(__dirname, 'index.js'),
+  entry: htmlPlugins,
   mode: process.env.NODE_ENV,
   output: {
-    filename: `${assetPath}/scripts/main.js`,
-    path: path.resolve(__dirname, 'dist' + distRules),
-    publicPath: "/"
+    path: path.join(__dirname, 'dist' + distRules),
+    publicPath: '/'
   },
   module: {
     rules: moduleRules
@@ -352,75 +367,50 @@ module.exports = {
     new CleanWebpackPlugin(),
     new CopyWebpackPlugin({
       patterns: [
-        {
-          from: 'src/_data',
-          to: `${assetPath}/data`,
-        },
-        {
-          from: 'src/_images',
-          to: `${assetPath}/images`,
-        },
-        {
-          from: 'src/_fonts',
-          to: `${assetPath}/fonts`,
-        },
-        {
-          from:'src/_icomoon/fonts',
-          to:`${assetPath}/fonts`
-        },
-        {
-          from: '**/*',
-          globOptions: {
-            ignore:['{**/\_*,**/\_*/**}','**/*.pug'],
-          },
-          context: 'src/',
-        }
+        { from: 'src/_data', to: `${assetPath}/data`, },
+        { from: 'src/_images', to: `${assetPath}/images`, },
+        { from: 'src/_fonts', to: `${assetPath}/fonts`, },
+        { from:'src/_icomoon/fonts', to:`${assetPath}/fonts` },
+        { from: '**/*', globOptions: { ignore:['{**/\_*,**/\_*/**}','**/*.pug'], }, context: 'src/', }
       ]
     }),
-
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
       'window.jQuery': 'jquery',
       $j: 'jquery'
     }),
-
-    new MiniCssExtractPlugin({
-      filename: `${assetPath}/styles/main.css`
-    })
-  ].concat(htmlPlugins, buildPlugins),
+    new PugPlugin({
+      test: /\.pug$/,
+      pretty: true,
+    }),
+  ].concat(buildPlugins),
   devServer: {
     static: {
-      directory: path.resolve(__dirname, 'dist' + distRules),
+      directory: path.join(__dirname, 'dist' + distRules),
       publicPath: '/',
       watch: true,
     },
-    hot:false,
+    hot: false,
     port: 3000
   },
   resolve: {
     modules: [
-      "node_modules"
+      'node_modules'
     ],
-    alias: {
-
-    }
+    alias: {}
   },
   resolve: {
     modules: [
-      "node_modules"
+      'node_modules'
     ],
-    alias: {
-
-    }
+    alias: {}
   },
   resolve: {
     modules: [
-      "node_modules"
+      'node_modules'
     ],
-    alias: {
-
-    }
+    alias: {}
   },
   optimization: {
     minimizer: [
