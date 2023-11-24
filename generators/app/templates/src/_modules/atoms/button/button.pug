@@ -1,10 +1,40 @@
 mixin button(spec)
-  - site = htmlWebpackPlugin.options
-  - spec = spec || {}
-  - spec.__class = spec.__class || ''
-  - spec.__target = spec.__target || ''
-  - spec.__link  = spec.__link || '#'
-  - spec.__text = spec.__text || ''
+  - site = myData
+	- spec = spec || {}
+	- spec.__class = spec.__class || ''
+	- spec.__type = spec.__type || 'anchor'
+	- spec.__link = spec.__link || '#'
+	- spec.__target = spec.__target || '_self'
+	- spec.__text = spec.__text || ''
+	- spec.__iconAfter = spec.__iconAfter || ''
+	- spec.__iconBefore = spec.__iconBefore || ''
 
-  a.button(href=spec.__link class=spec.__class target=spec.__target)&attributes(attributes)
-    span=spec.__text
+	- var tag = 'button'
+	- var attributes = {"type" : "button", "aria-label": spec.__arialabel}
+
+	if spec.__sort
+		- tag = 'button'
+		- attributes = {"type" : "button" , "aria-label": spec.__arialabel}
+
+	if spec.__type == 'anchor'
+		- tag = 'a'
+		- attributes = {"href": spec.__link, "target": spec.__target, "aria-label": spec.__arialabel}
+
+	if spec.__type == 'submit'
+		- tag = 'input'
+		- attributes = {"type": "submit", "value": spec.__text}
+
+	if spec.__type == 'span'
+		- tag = 'span'
+		- attributes = {}
+	
+	#{tag}.button.btn&attributes(attributes)(class=spec.__class)
+		if spec.__iconBefore !== ''
+			i.icon(class=spec.__iconBefore)
+			span.btn__text=spec.__text
+		else if spec.__type == 'submit'
+			span.btn__text=spec.__text
+		else
+			span.btn__text=spec.__text
+			if spec.__iconAfter !== ''
+				i.icon(class=spec.__iconAfter)

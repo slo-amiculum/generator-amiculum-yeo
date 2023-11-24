@@ -41,9 +41,13 @@ block content
       strong.text-orange-500 Amiculum Digital - Site Generator
       |, click on the button below
     
-    +button({
-      "__class": "my-10",
-      "__text": "Learn More", 
-      "__link": "https://www.npmjs.com/package/generator-yeo",
-      "__target": "_blank"
-    })
+    // select from button, anchor, submit or span
+		+button({
+			'__type': 'anchor', 
+			'__class': 'my-10',
+			'__text': 'Learn More',
+			'__link': 'https://www.npmjs.com/package/generator-yeo',
+			'__target': '_blank',
+			'__iconAfter': '',
+			'__arialabel': 'Learn more'
+		})
