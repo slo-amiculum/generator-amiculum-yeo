@@ -1,5 +1,5 @@
 mixin button(spec)
-  - site = myData
+	- site = myData
 	- spec = spec || {}
 	- spec.__class = spec.__class || ''
 	- spec.__type = spec.__type || 'anchor'
@@ -8,22 +8,22 @@ mixin button(spec)
 	- spec.__text = spec.__text || ''
 	- spec.__iconAfter = spec.__iconAfter || ''
 	- spec.__iconBefore = spec.__iconBefore || ''
-
+	
 	- var tag = 'button'
 	- var attributes = {"type" : "button", "aria-label": spec.__arialabel}
-
+	
 	if spec.__sort
 		- tag = 'button'
 		- attributes = {"type" : "button" , "aria-label": spec.__arialabel}
-
+	
 	if spec.__type == 'anchor'
 		- tag = 'a'
 		- attributes = {"href": spec.__link, "target": spec.__target, "aria-label": spec.__arialabel}
-
+		
 	if spec.__type == 'submit'
 		- tag = 'input'
 		- attributes = {"type": "submit", "value": spec.__text}
-
+	
 	if spec.__type == 'span'
 		- tag = 'span'
 		- attributes = {}
